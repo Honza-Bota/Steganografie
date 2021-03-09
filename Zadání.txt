@@ -1,0 +1,13 @@
+Popis:Steganografie
+
+Termín: 11. březen 2021 23:59
+
+Pokyny
+
+Napište program, který bude skrývat informace do bitmapového souboru a bude je umět z bitmapového souboru zpětně zobrazit. 
+Program vytvořte tak, aby šel spouštět z příkazového řádku v následujícím tvaru:
+
+stega --hide "Zikmund je neznaboh" tree.bmp                  // schová text v obrázku
+stega --show tree.bmp                                        ​// zobrazí text z obrázku
+
+Program otestujte.
