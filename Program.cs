@@ -32,7 +32,15 @@ namespace Stega
             string novySoubor = soubor.Split('.')[0] + "Encrypt" + ".png";
 
             //načtení obrázku jako bitmapy
-            Bitmap bmp = new Bitmap(soubor);
+            Bitmap bmp = null;
+            try
+            {
+                 bmp = new Bitmap(soubor);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
 
             //bložení dat do obrázku
             int x, y;
@@ -57,13 +65,13 @@ namespace Stega
                 if (x == bmp.Width) y++;
             }
 
-            ////vložení kontrolního součtu
-            //x++;
-            //bmp.SetPixel(x, y, Color.FromArgb(
-            //        bmp.GetPixel(x, y).R,
-            //        bmp.GetPixel(x, y).G,
-            //        (byte)(text.Length + 1)
-            //        ));
+            //vložení kontrolního součtu
+            x++; if (x == bmp.Width) y++;
+            bmp.SetPixel(x, y, Color.FromArgb(
+                    bmp.GetPixel(x, y).R,
+                    bmp.GetPixel(x, y).G,
+                    (byte)(char)(text.Length + 1)
+                    ));
 
             //uložní nového souboru
             bmp.Save(novySoubor);
@@ -76,17 +84,27 @@ namespace Stega
         {
             //promněná pro zprávu
             string zprava = "";
+            string navrat = null;
 
             //načtení a vytvoření bitmapy se zašifrovaným textem
-            Bitmap bmp = new Bitmap(soubor);
+            Bitmap bmp = null;
+            try
+            {
+                bmp = new Bitmap(soubor);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
 
             //zjištění počtu znaků
             int delka = (int)bmp.GetPixel(0, 0).B;
 
             //načtení textu
-            for (int y = 0; y < bmp.Height; y++)
+            int x, y;
+            for (y = 0; y < bmp.Height; y++)
             {
-                for (int x = 1; x < bmp.Width; x++)
+                for (x = 1; x < bmp.Width; x++)
                 {
                     Color pixel = bmp.GetPixel(x, y);
 
@@ -94,14 +112,28 @@ namespace Stega
 
                     if (zprava.Length == delka)
                     {
-                        //výpis textu
-                        return $@"Úspěšně dešifrováno. 
+                        navrat = $@"Úspěšně dešifrováno. 
 Zpráva: {zprava}";
+                        return navrat;
                     }
+                    #region pokus o kontrolní součet
+                    //                    if (zprava.Length == delka+1)
+                    //                    {                        
+                    //                        return navrat = $@"Úspěšně dešifrováno. 
+                    //Zpráva: {zprava.Remove(zprava.Length-1,1)}
+                    //Kontrolní součet: {(byte)zprava.Last()-1}";
+
+                    //                        //if ((int)bmp.GetPixel(x+1,y).B == delka +1)
+                    //                        //{
+                    //                        //    navrat += "\nZpráva je kompletní.";
+                    //                        //    return navrat;
+                    //                        //} 
+                    #endregion
+                
                 }
             }
 
-            return "Chyba";
+            return "Err";
         }
 
         private static string Help()
