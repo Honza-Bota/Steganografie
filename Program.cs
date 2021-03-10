@@ -62,11 +62,11 @@ namespace Stega
                     (byte)(text[x-1])
                     ));
 
-                if (x == bmp.Width) y++;
+                if (x == bmp.Width) { x = 0; y++; }
             }
 
             //vložení kontrolního součtu
-            x++; if (x == bmp.Width) y++;
+            x++; if (x == bmp.Width) { x = 0; y++; }
             bmp.SetPixel(x, y, Color.FromArgb(
                     bmp.GetPixel(x, y).R,
                     bmp.GetPixel(x, y).G,
